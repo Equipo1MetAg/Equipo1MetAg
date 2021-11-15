@@ -78,6 +78,11 @@ public class Tareas extends javax.swing.JFrame {
         jLabel1.setText("Agregar Tarea");
 
         jButton2.setText("++");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Tareas en progreso");
 
@@ -133,6 +138,12 @@ public class Tareas extends javax.swing.JFrame {
         AgregarTarea at = new AgregarTarea();
         at.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        TareasProgreso tp= new TareasProgreso();
+        tp.setVisible(true);
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
