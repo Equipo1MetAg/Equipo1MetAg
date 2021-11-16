@@ -5,10 +5,10 @@
  */
 package proyectopomodoro;
 
-/**
- *
- * @author Edson Antonio
- */
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
+
 public class TareasProgreso extends javax.swing.JFrame {
 
     /**
@@ -54,6 +54,11 @@ public class TareasProgreso extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tblTareasProgre);
 
         btnListas.setText(">>>");
+        btnListas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListasActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Marcar Tarea Terminada");
 
@@ -104,6 +109,31 @@ public class TareasProgreso extends javax.swing.JFrame {
         PomodoroTimer pt = new PomodoroTimer();
         pt.setVisible(true);
     }//GEN-LAST:event_btnPomoActionPerformed
+
+    private void btnListasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListasActionPerformed
+        
+        int response = JOptionPane.showConfirmDialog(this, "¿Quieres marcar la tarea como terminada?", "Confirmación", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+        
+        if(response==JOptionPane.YES_OPTION){
+            JOptionPane.showMessageDialog(null, "Tarea finalizada con éxito", "Información", JOptionPane.PLAIN_MESSAGE);
+          
+            
+        }else if(response==JOptionPane.NO_OPTION){
+            JOptionPane.showMessageDialog(null, "Ha seleccionado no terminar la tarea", "Información", JOptionPane.PLAIN_MESSAGE);
+        }
+
+    DefaultTableModel df1 = (DefaultTableModel) tblTareasProgre.getModel();
+    int rs[] = tblTareasProgre.getSelectedRows();
+    for (int i = rs.length-1; i >=0 ; i--) {
+
+        int k = rs[i];
+
+        df1.removeRow(k);
+
+    }
+                                                   
+        
+    }//GEN-LAST:event_btnListasActionPerformed
 
     /**
      * @param args the command line arguments

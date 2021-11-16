@@ -5,6 +5,7 @@
  */
 package proyectopomodoro;
 
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import javax.swing.JOptionPane;
 
@@ -25,7 +26,7 @@ public class AgregarTarea extends javax.swing.JFrame {
         WindowEvent closeWindow = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
         
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -62,6 +63,15 @@ public class AgregarTarea extends javax.swing.JFrame {
 
         jLabel1.setText("Nombre de la tarea");
 
+        fldNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                fldNombreKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                fldNombreKeyTyped(evt);
+            }
+        });
+
         lblDesc.setText("Descripción");
 
         btnAgregar.setText("Agregar");
@@ -80,6 +90,11 @@ public class AgregarTarea extends javax.swing.JFrame {
 
         tareaDesc.setColumns(20);
         tareaDesc.setRows(5);
+        tareaDesc.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tareaDescKeyTyped(evt);
+            }
+        });
         jScrollPane2.setViewportView(tareaDesc);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -141,6 +156,24 @@ public class AgregarTarea extends javax.swing.JFrame {
         tareaDesc.setText("");
         fldNombre.setText("");
     }//GEN-LAST:event_btnBorrarActionPerformed
+
+    private void fldNombreKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fldNombreKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fldNombreKeyPressed
+
+    private void tareaDescKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tareaDescKeyTyped
+            if(tareaDesc.getText().length() >= 100)
+    {
+        evt.consume();
+    }
+    }//GEN-LAST:event_tareaDescKeyTyped
+
+    private void fldNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fldNombreKeyTyped
+        if(fldNombre.getText().length() >= 100)
+        {
+        evt.consume();
+        }   
+    }//GEN-LAST:event_fldNombreKeyTyped
 
     /**
      * @param args the command line arguments

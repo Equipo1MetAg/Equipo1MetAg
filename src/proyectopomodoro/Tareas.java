@@ -6,11 +6,10 @@
 package proyectopomodoro;
 
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import static proyectopomodoro.TareasProgreso.tblTareasProgre;
 
-/**
- *
- * @author Edson Antonio
- */
+
 public class Tareas extends javax.swing.JFrame {
 
     /**
@@ -27,10 +26,10 @@ public class Tareas extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel)tblTareas.getModel();
         model.addRow(dataRow);
     }     
+  
+     
     
-                                  
-     
-     
+   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -47,6 +46,7 @@ public class Tareas extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        btnProgreso = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -88,6 +88,13 @@ public class Tareas extends javax.swing.JFrame {
 
         jLabel3.setText("Tareas Pendientes");
 
+        btnProgreso.setText("Marcar en Progreso");
+        btnProgreso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProgresoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -110,7 +117,8 @@ public class Tareas extends javax.swing.JFrame {
                         .addGap(34, 34, 34)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 618, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 618, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnProgreso))))
                 .addContainerGap(38, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -128,7 +136,9 @@ public class Tareas extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(107, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btnProgreso)
+                .addContainerGap(66, Short.MAX_VALUE))
         );
 
         pack();
@@ -144,6 +154,29 @@ public class Tareas extends javax.swing.JFrame {
         tp.setVisible(true);
         
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void btnProgresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProgresoActionPerformed
+                                                      
+       
+        TableModel model1 = tblTareas.getModel();
+        int indexs[] = tblTareas.getSelectedRows();
+        
+        Object[] row = new Object[4];
+        
+        TareasProgreso frm2 = new TareasProgreso();
+        DefaultTableModel model2 = (DefaultTableModel)frm2.tblTareasProgre.getModel();
+               
+        for(int i = 0; i < indexs.length; i++)
+        {
+            row[0] = model1.getValueAt(indexs[i], 0);
+            row[1] = model1.getValueAt(indexs[i], 1);
+            
+            model2.addRow(row);
+        }
+        
+        frm2.setVisible(true);
+  
+    }//GEN-LAST:event_btnProgresoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -181,6 +214,7 @@ public class Tareas extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnProgreso;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;

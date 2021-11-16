@@ -13,16 +13,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import static javafx.util.Duration.millis;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author akshs
+ * @author Edson Antonio
  */
 
 public class PomodoroTimer extends javax.swing.JFrame {
     Timer timer;
     int pomodoroNo;
-    boolean paused;//keeps track of the number of pomodoro intervals completed
+    boolean paused;
     
     public PomodoroTimer() 
     {   
@@ -46,8 +47,9 @@ public class PomodoroTimer extends javax.swing.JFrame {
         shortBreakTime = new javax.swing.JTextField();
         longBreakTime = new javax.swing.JTextField();
         start = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         pomodoroPanel.setBackground(new java.awt.Color(204, 204, 204));
         pomodoroPanel.setToolTipText("");
@@ -87,10 +89,10 @@ public class PomodoroTimer extends javax.swing.JFrame {
         timerLabel.setText("Tiempo:");
 
         timeElapsed.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        timeElapsed.setText("0:25:00");
+        timeElapsed.setText("0:00:00");
 
         pomodoroTime.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        pomodoroTime.setText("0:25:00");
+        pomodoroTime.setText("0:00:10");
         pomodoroTime.setAlignmentY(0.6F);
         pomodoroTime.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -99,7 +101,7 @@ public class PomodoroTimer extends javax.swing.JFrame {
         });
 
         shortBreakTime.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        shortBreakTime.setText("0:05:00");
+        shortBreakTime.setText("0:00:05");
         shortBreakTime.setAlignmentY(0.6F);
         shortBreakTime.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -108,7 +110,7 @@ public class PomodoroTimer extends javax.swing.JFrame {
         });
 
         longBreakTime.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        longBreakTime.setText("0:30:00");
+        longBreakTime.setText("0:00:15");
         longBreakTime.setAlignmentY(0.6F);
 
         start.setFont(new java.awt.Font("Calibri", 1, 11)); // NOI18N
@@ -183,28 +185,43 @@ public class PomodoroTimer extends javax.swing.JFrame {
                 .addGap(20, 20, 20))
         );
 
+        jButton1.setFont(new java.awt.Font("Calibri", 1, 11)); // NOI18N
+        jButton1.setText("CANCELAR");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap(39, Short.MAX_VALUE)
-                .addComponent(pomodoroPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(pomodoroPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addGap(153, 153, 153))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(59, Short.MAX_VALUE)
                 .addComponent(pomodoroPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(57, 57, 57))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1)
+                .addGap(23, 23, 23))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
     
-    public void setTime(int time) //function to display timer
+    public void setTime(int time) 
     {   
             
             long timeNow = 1000*time;
@@ -213,11 +230,11 @@ public class PomodoroTimer extends javax.swing.JFrame {
             long hour = (timeNow / (1000 * 60 * 60)) % 24;
             timeElapsed.setText(String.format("%02d:%02d:%02d", hour, minute, second));
     }
-    public void pomodoroTimer() //runs for pomodoro time
+    public void pomodoroTimer() 
     {  
         timer = new Timer();
         timer.schedule(new TimerTask()  {
-        int counter = 1500;
+        int counter = 0;
         String [] customTime = pomodoroTime.getText().split(":");
         int counterLimit = Integer.parseInt(customTime[0])*60*60 + Integer.parseInt(customTime[1])*60+
                  Integer.parseInt(customTime[2]);
@@ -227,33 +244,34 @@ public class PomodoroTimer extends javax.swing.JFrame {
             {   
                 if(!paused)
                 { 
-                --counter;
+                ++counter;
                 setTime(counter);
-                if(counter == counterLimit && pomodoroNo < 4) //if less than 4 pomodoros are complete, take a short break
+                if(counter == counterLimit && pomodoroNo < 4) //si se completan menos de 4 pomodoros, tómese un breve descanso
+
                     {   
                        timer.cancel();
                        Toolkit.getDefaultToolkit().beep();
-                       JOptionPane.showMessageDialog(null,"You have completed a pomodoro! Take a short break!");
+                       JOptionPane.showMessageDialog(null,"Terminaste un Pomodoro! Toma un descanso");
                        shortBreakTimer();
                        pomodoroNo ++;
                     }
            
-                else if (counter == counterLimit && pomodoroNo == 4) //if 4 pomodoros are complete, take a long break
+                else if (counter == counterLimit && pomodoroNo == 4) //si se completan 4 pomodoros, descanso largo
                     {
                         timer.cancel();
                         Toolkit.getDefaultToolkit().beep();
-                        JOptionPane.showMessageDialog(null,"You have completed 4 pomodoros! Take a long break!");
+                        JOptionPane.showMessageDialog(null,"Terminaste 4 Pomodoro! Toma un descanso largo");
                         longBreakTimer();
                     }
                 }   }},0,1000);
             
     }
 
-    public void shortBreakTimer() //runs for short-break time
+    public void shortBreakTimer() //descanso corto
     {   
         timer = new Timer();
         timer.schedule(new TimerTask()  {
-        int counter = 300;
+        int counter = 0;
         String [] customTime = shortBreakTime.getText().split(":");
         int counterLimit = Integer.parseInt(customTime[0])*60*60 + Integer.parseInt(customTime[1])*60+
                  Integer.parseInt(customTime[2]);
@@ -263,23 +281,23 @@ public class PomodoroTimer extends javax.swing.JFrame {
             {   
                 if (!paused)
                 {
-                --counter;
+                ++counter;
                 setTime(counter);
                 if(counter == counterLimit) 
                     {  timer.cancel();
                        Toolkit.getDefaultToolkit().beep();
-                       JOptionPane.showMessageDialog(null,"Time up! Resume work.");
+                       JOptionPane.showMessageDialog(null,"Se acabo el tiempo! Continua el trabajo.");
                        pomodoroTimer();
                        
                     }
                 }}},0,1000); 
     }
     
-    public void longBreakTimer() //runs for long break time
+    public void longBreakTimer() //descanso largo
     {
         timer = new Timer();
         timer.schedule(new TimerTask()  {
-        int counter = 0;
+        int counter = 15;
         String [] customTime = longBreakTime.getText().split(":");
         int counterLimit = Integer.parseInt(customTime[0])*60*60 + Integer.parseInt(customTime[1])*60+
                  Integer.parseInt(customTime[2]);
@@ -294,7 +312,7 @@ public class PomodoroTimer extends javax.swing.JFrame {
                 {   
                     timer.cancel();
                     Toolkit.getDefaultToolkit().beep();
-                    JOptionPane.showMessageDialog(null,"Time up! Resume work.");
+                    JOptionPane.showMessageDialog(null,"Se acabo el tiempo! Continua con el trabajo.");
                     pomodoroNo = 1;
                     pomodoroTimer();
                 }
@@ -315,8 +333,10 @@ public class PomodoroTimer extends javax.swing.JFrame {
         if(!paused)
         {
             paused = true;
-            pause.setText("Unpause");
+            pause.setText("Despausar");
             reset.setEnabled(false);
+        JOptionPane.showMessageDialog(null,"El temporizador está en pausa");    
+            
         }
      
         else
@@ -330,7 +350,7 @@ public class PomodoroTimer extends javax.swing.JFrame {
     private void resetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetActionPerformed
     
         timer.cancel();
-        timeElapsed.setText("00:25:00");
+        timeElapsed.setText("00:00:00");
         pause.setEnabled(false);
         reset.setEnabled(false);
         
@@ -343,6 +363,13 @@ public class PomodoroTimer extends javax.swing.JFrame {
     private void pomodoroTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pomodoroTimeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_pomodoroTimeActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        dispose();
+        TareasProgreso frm2 = new TareasProgreso();
+        DefaultTableModel model2 = (DefaultTableModel)frm2.tblTareasProgre.getModel();
+        frm2.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
   
     public static void main(String args[]) {
@@ -371,6 +398,7 @@ public class PomodoroTimer extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel longBreakLabel;
     private javax.swing.JTextField longBreakTime;
     private javax.swing.JButton pause;
